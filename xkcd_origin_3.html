@@ -1,0 +1,106 @@
+<html>
+<head>
+
+<script src="jquery.js"></script>
+<script src="jquery.1.5.js.pagespeed.ce.Y8G8LriY9o.js"></script> 
+<script src="jquery.ui.core.js.pagespeed.ce.UfkEk6Q1kt.js"></script>
+<script src="jquery.ui.widget.js.pagespeed.ce.WK2kt5lk4Y.js"></script> 
+<script src="jquery.ui.mouse.js.pagespeed.ce.UNK7hbHcVP.js"></script> 
+<script src="jquery.ui.sortable.js.pagespeed.ce.begtIWWRPT.js"></script> 
+<script src="jquery.ui.draggable.js.pagespeed.ce.tMaBtihP7h.js"></script> 
+
+	<script>
+	//the script for draggable function written in reload function
+	</script>
+
+<link rel="stylesheet" type="text/css" href="xkcd.css" />
+</head>
+<body onload="random_img()">
+<div id="menu1">
+<h1 id="title"></h1>
+<input id = "first_img" type="submit" onclick="first_img()" value="|<" />
+<input id = "previous_img" type="submit" onclick="previous_img()" value="Prev" />
+<input id = "random_img" type="submit" onclick="random_img()" value="Random" />
+<input id = "next_img" type="submit" onclick="next_img()" value="Next" />
+<input id = "last_img" type="submit" onclick="last_img()" value=">|" /> 
+</div>
+
+<span id="span"></span>
+<div id="img_container">
+<img id = "img"  src="significant.png" />
+</div>
+<div id="menu2">
+<h1 id="title"></h1>
+<input id = "first_img" type="submit" onclick="first_img()" value="|<" />
+<input id = "previous_img" type="submit" onclick="previous_img()" value="Prev" />
+<input id = "random_img" type="submit" onclick="random_img()" value="Random" />
+<input id = "next_img" type="submit" onclick="next_img()" value="Next" />
+<input id = "last_img" type="submit" onclick="last_img()" value=">|" /> 
+</div>
+
+<script>
+var i = 0;
+var max=800;
+var image;
+   function random_img()
+   {
+      i = 1 + Math.floor(Math.random()*max); 
+      reload();
+   }
+   function pad(number, length) { 
+   var str = '' + number;
+	   while (str.length < length) {
+	        str = '0' + str;
+       }
+   return str;
+   }
+   function next_img()
+   {
+       if(i<max) i++;
+	   else i=1;  
+	   reload();
+   }  
+   function first_img()
+   {
+       i=1;  
+	   reload();
+   }
+   function last_img()
+   {
+       i=max;  
+	   reload();
+   } 
+   function previous_img()
+   {
+       
+	   if(i<=1) i=max;
+       else i--;	   
+       reload();
+   }
+   function reload()
+   {
+    $("#img").css({'postion':'relative', 'top':'0px', left:'0px'});//position image other than the last dragged position
+	$("#img").draggable({
+	axis: 'x', containment: 'parent'}); //make image draggable along x-axis
+	  var imagename="images/img_"+i+".png";
+      if(image = $("#img").attr("src",imagename))
+	    loadXMLDoc();
+   }
+   function loadXMLDocInitial()
+   {
+     $.get("init.txt", function(data){
+     max=parseInt(data);
+	 $("#span").text(""+data);});
+   }
+   function loadXMLDoc()
+   {
+     $.get("alt/alt_"+i+".txt", function(data){
+	 image.attr("title",data);
+     });
+	 $.get("title/title_"+i+".txt", function(data){
+	 $("#title").text(data);
+	 });
+   }
+   </script>
+</body>
+</html>
